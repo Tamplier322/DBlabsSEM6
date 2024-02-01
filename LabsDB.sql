@@ -121,3 +121,41 @@ BEGIN
   DeleteRecord(1);
 END;
 
+
+
+
+
+CREATE OR REPLACE FUNCTION CalculateTotalCompensation(
+  p_monthly_salary NUMBER,
+  p_annual_bonus_percentage INTEGER
+) RETURN NUMBER
+IS
+  v_annual_bonus_percentage NUMBER;
+  v_total_compensation NUMBER;
+BEGIN
+  IF p_annual_bonus_percentage < 0 OR p_annual_bonus_percentage > 100 THEN
+    RAISE_APPLICATION_ERROR(-20001, 'Процент должен быть в диапазоне от 0 до 100');
+  END IF;
+
+  v_annual_bonus_percentage := p_annual_bonus_percentage / 100;
+
+  v_total_compensation := (1 + v_annual_bonus_percentage) * 12 * p_monthly_salary;
+
+  RETURN v_total_compensation;
+EXCEPTION
+  WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE('Ошибка: ' || SQLERRM);
+    RETURN NULL;
+END;
+
+DECLARE
+  v_monthly_salary NUMBER := 5000;
+  v_annual_bonus_percentage INTEGER := 10;
+  v_result NUMBER;
+BEGIN
+  v_result := CalculateTotalCompensation(v_monthly_salary, v_annual_bonus_percentage);
+  IF v_result IS NOT NULL THEN
+    DBMS_OUTPUT.PUT_LINE('Общее вознаграждение за год: ' || v_result);
+  END IF;
+END;
+
