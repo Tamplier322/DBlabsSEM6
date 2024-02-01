@@ -75,3 +75,49 @@ BEGIN
 END;
 
 
+
+
+CREATE OR REPLACE PROCEDURE InsertRecord(p_id NUMBER, p_val NUMBER)
+IS
+BEGIN
+  INSERT INTO MyTable (id, val) VALUES (p_id, p_val);
+  COMMIT;
+END;
+
+CREATE OR REPLACE PROCEDURE UpdateRecord(p_id NUMBER, p_new_val NUMBER)
+IS
+BEGIN
+  UPDATE MyTable SET val = p_new_val WHERE id = p_id;
+  COMMIT;
+END;
+
+CREATE OR REPLACE PROCEDURE DeleteRecord(p_id NUMBER)
+IS
+BEGIN
+  DELETE FROM MyTable WHERE id = p_id;
+  COMMIT;
+END;
+
+CREATE OR REPLACE PROCEDURE DeleteAllRecords
+IS
+BEGIN
+  DELETE FROM MyTable;
+  COMMIT;
+END;
+
+BEGIN
+  DeleteAllRecords;
+END;
+
+BEGIN
+  InsertRecord(1, 100);
+END;
+
+BEGIN
+  UpdateRecord(1, 200);
+END;
+
+BEGIN
+  DeleteRecord(1);
+END;
+
