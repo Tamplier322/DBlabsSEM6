@@ -16,6 +16,9 @@ BEGIN
   COMMIT;
 END;
 
+
+
+
 CREATE OR REPLACE FUNCTION CheckEvenOdd
 RETURN VARCHAR2
 IS
@@ -46,4 +49,29 @@ BEGIN
   v_result := CheckEvenOdd();
   DBMS_OUTPUT.PUT_LINE('Result: ' || v_result);
 END;
+
+
+
+
+CREATE OR REPLACE FUNCTION GenerateInsertCommand(p_id NUMBER)
+RETURN VARCHAR2
+IS
+  v_val NUMBER;
+  v_insert_command VARCHAR2(200);
+BEGIN
+  SELECT val INTO v_val FROM MyTable WHERE id = p_id AND ROWNUM = 1;
+
+  v_insert_command := 'INSERT INTO MyTable (id, val) VALUES (' || p_id || ', ' || v_val || ');';
+
+  DBMS_OUTPUT.PUT_LINE('Insert Command: ' || v_insert_command);
+
+  RETURN v_insert_command;
+END;
+
+DECLARE
+  v_insert_cmd VARCHAR2(200);
+BEGIN
+  v_insert_cmd := GenerateInsertCommand(643);
+END;
+
 
